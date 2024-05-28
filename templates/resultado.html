@@ -12,13 +12,19 @@
         .table-container {
             margin-bottom: 20px;
         }
+        .pivot-row {
+            background-color: red;
+        }
+        .pivot-column {
+            background-color: blue;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Resultado do Simplex</h1>
         <h2>Resultados do cálculo do Simplex:</h2>
-        {% for tabela in tabelas %}
+        {% for tabela, pivot in zip(tabelas, pivots) %}
             <div class="table-container">
                 <h3>Iteração {{ loop.index }}</h3>
                 <table border="1">
@@ -31,9 +37,9 @@
                     </thead>
                     <tbody>
                         {% for row in tabela %}
-                            <tr>
+                            <tr class="{{ 'pivot-row' if loop.index0 == pivot[0] else '' }}">
                                 {% for val in row %}
-                                    <td>{{ val }}</td>
+                                    <td class="{{ 'pivot-column' if loop.index0 == pivot[1] else '' }}">{{ val }}</td>
                                 {% endfor %}
                             </tr>
                         {% endfor %}

@@ -1,11 +1,8 @@
-from flask import Flask, request, render_template, redirect, url_for
-
-app = Flask(__name__)
-
-class SimplexCalculator:
+class LogicCalc:
     def __init__(self):
         self.tabelas = []
         self.table = []
+        self.pivots = []
 
     def definir_fo(self, fo: list):
         fo = [fo[0]] + [-j for j in fo[1:]]
@@ -49,6 +46,7 @@ class SimplexCalculator:
 
     def resolver(self):
         self.tabelas.append([linha[:] for linha in self.table])
+        self.pivots.append((None, None))
         while self.eh_negativo():
             coluna_entrada = self.retornar_coluna_entrada()
             linha_saida = self.retornar_linha_saida(coluna_entrada)
@@ -61,29 +59,4 @@ class SimplexCalculator:
                     nova_linha = self.calcular_nova_linha(linha, coluna_entrada, nova_linha_pivot)
                     self.table[i] = nova_linha
             self.tabelas.append([linha[:] for linha in self.table])
-
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("index.html")
-
-@app.route("/resultado.html", methods=["GET"])
-def resultado():
-    fo_values = [int(val) for val in request.args.get("fo").split(",")]
-    restr_quantity = int(request.args.get("restr_quantity"))
-
-    restr_values = []
-    for i in range(restr_quantity):
-        restr_values.append(
-            [int(val) for val in request.args.get(f"restr_{i+1}").split(",")]
-        )
-
-    logic = SimplexCalculator()
-    logic.definir_fo(fo_values)
-    for res in restr_values:
-        logic.add_restricoes(res)
-
-    logic.resolver()
-    return render_template("resultado.html", tabelas=logic.tabelas)
-
-if __name__ == "__main__":
-    app.run(debug=True)
+            self.pivots.append((linha_saida, coluna_entrada))

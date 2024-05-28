@@ -5,15 +5,12 @@ app = Flask(__name__)
 logic = LogicCalc()
 
 class SimplexCalculator:
-
     @app.route("/", methods=["GET"])
     def index():
-        return render_template("./index.html")
+        return render_template("index.html")
 
-    @app.route("/resultado.html")
+    @app.route("/resultado.html", methods=["GET"])
     def resultado():
-        # Processar os resultados e passar para o template
-
         fo_values = [int(val) for val in request.args.get("fo").split(",")]
         restr_quantity = int(request.args.get("restr_quantity"))
 
@@ -23,13 +20,13 @@ class SimplexCalculator:
                 [int(val) for val in request.args.get(f"restr_{i+1}").split(",")]
             )
 
+        logic = LogicCalc()
         logic.definir_fo(fo_values)
         for res in restr_values:
             logic.add_restricoes(res)
 
         logic.resolver()
-        resultados = logic.processar_resultados()
-        return render_template("/resultado.html", resultados=resultados)
+        return render_template("resultado.html", tabelas=logic.tabelas, pivots=logic.pivots, zip=zip)
 
 
 if __name__ == "__main__":
