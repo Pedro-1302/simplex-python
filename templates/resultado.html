@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado Simplex</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .table-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Resultado do Simplex</h1>
+        <h2>Resultados do cálculo do Simplex:</h2>
+        {% for tabela in tabelas %}
+            <div class="table-container">
+                <h3>Iteração {{ loop.index }}</h3>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            {% for _ in tabela[0] %}
+                                <th>Coluna {{ loop.index }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in tabela %}
+                            <tr>
+                                {% for val in row %}
+                                    <td>{{ val }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

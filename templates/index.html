@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplex Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        form {
+            margin-top: 20px;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        button {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+    </style> 
+</head>
+<body>
+    <div class="container">
+        <h1>Simplex Calculator</h1>
+        <form action="resultado.html" method="get" id="simplexForm">
+            <label for="fo">Função Objetiva:</label>
+            <input type="text" name="fo" id="fo" placeholder="Digite os coeficientes separados por vírgula" required><br>
+            <label for="restr_quantity">Quantidade de Restrições:</label>
+            <input type="number" name="restr_quantity" id="restr_quantity" required><br>
+            <div id="restricoes">
+                <!-- Aqui serão adicionados os campos de restrição de acordo com o input do usuario -->
+            </div>
+            <button type="submit">Calcular</button>
+        </form>
+    </div>
+    <script>
+        // Função para criar campos de restrição dinamicamente
+        function criarCamposDeRestricao() {
+            var restricoesDiv = document.getElementById('restricoes');
+            restricoesDiv.innerHTML = ''; // Limpa qualquer conteúdo anterior
+
+            var quantidadeRestricoes = document.getElementById('restr_quantity').value;
+
+            // FOR para criar os campos de restrição com base na quantidade informada pelo usuario
+            for (var i = 1; i <= quantidadeRestricoes; i++) {
+                var restricaoDiv = document.createElement('div');
+                restricaoDiv.classList.add('restricao');
+
+                var label = document.createElement('label');
+                label.setAttribute('for', 'restr_' + i);
+                label.textContent = 'Restrição ' + i + ':';
+
+                var input = document.createElement('input');
+                input.setAttribute('type', 'text');
+                input.setAttribute('name', 'restr_' + i);
+                input.setAttribute('id', 'restr_' + i);
+                input.setAttribute('placeholder', 'Digite os coeficientes separados por vírgula');
+                input.setAttribute('required', 'required');
+
+                restricaoDiv.appendChild(label);
+                restricaoDiv.appendChild(input);
+
+                restricoesDiv.appendChild(restricaoDiv);
+            }
+        }
+
+        // Adiciona um ouvinte de evento ao input restr_quantity para chamar a função criarCamposDeRestricao quando o valor mudar
+        document.getElementById('restr_quantity').addEventListener('change', criarCamposDeRestricao);
+
+        // Chama a função criarCamposDeRestricao inicialmente para exibir os campos de acordo com o valor inicial do input restr_quantity
+        criarCamposDeRestricao();
+    </script>
+</body>
+</html>
