@@ -4,21 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simplex Calculator</title>
-    <link rel="stylesheet" href="css/styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #eaeaea;
         }
         
         .container {
-            max-width: 800px;
-            margin: 50px auto;
+            width: 90%;
+            max-width: 580px;
             padding: 20px;
             background-color: #f4f4f4;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            text-align: left;
+            width: 100%;
+            max-width: 500px; /* Limita a largura máxima dos inputs */
+            padding: 10px;
         }
         
         h1 {
@@ -27,6 +38,9 @@
         
         form {
             margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         input[type="text"],
@@ -35,6 +49,7 @@
             display: block;
             margin-bottom: 10px;
             width: 100%;
+            max-width: 500px; /* Limita a largura máxima dos inputs */
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -62,12 +77,12 @@
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
-        }
+        }x
         
         th {
             background-color: #f2f2f2;
         }
-    </style> 
+    </style>
 </head>
 <body>
     <div class="container">
@@ -77,16 +92,32 @@
             <input type="text" name="fo" id="fo" placeholder="Digite os coeficientes separados por vírgula" required><br>
             <label for="restr_quantity">Quantidade de Restrições:</label>
             <input type="number" name="restr_quantity" id="restr_quantity" required><br>
-            <div id="restricoes">
-                <!-- Aqui serão adicionados os campos de restrição de acordo com o input do usuario -->
-            </div>
-            <button type="submit">Calcular</button>
         </form>
     </div>
     <script>
         // Função para criar campos de restrição dinamicamente
         function criarCamposDeRestricao() {
-            var restricoesDiv = document.getElementById('restricoes');
+            var form = document.getElementById('simplexForm');
+            var quantidadeRestricoes = document.getElementById('restr_quantity').value;
+
+            for (var i = 1; i <= quantidadeRestricoes; i++) {
+                var label = document.createElement('label');
+                label.setAttribute('for', 'restr_' + i);
+                label.textContent = `Restrição ${i}:`;
+
+
+                var input = document.createElement('input');
+                input.setAttribute('type', 'text');
+                input.setAttribute('name', 'restr_' + i);
+                input.setAttribute('id', 'restr_' + i);
+                input.setAttribute('placeholder', 'Digite os coeficientes separados por vírgula');
+                input.setAttribute('required', 'required');
+
+                form.append(label);
+                form.append(input);
+            }
+
+            /*var restricoesDiv = document.getElementById('restricoes');
             restricoesDiv.innerHTML = ''; // Limpa qualquer conteúdo anterior
 
             var quantidadeRestricoes = document.getElementById('restr_quantity').value;
@@ -110,12 +141,24 @@
                 restricaoDiv.appendChild(label);
                 restricaoDiv.appendChild(input);
 
-                restricoesDiv.appendChild(restricaoDiv);
-            }
+                restricoesDiv.appendChild(restricaoDiv); 
+            }*/
+        }
+
+        function createCalculateButton() {
+            var form = document.getElementById('simplexForm');
+            var calculateButton = document.createElement('button');
+            calculateButton.innerText = 'Calcular';
+            form.append(calculateButton);
+        }
+
+        function valueChanged() {
+            criarCamposDeRestricao();
+            createCalculateButton();
         }
 
         // Adiciona um ouvinte de evento ao input restr_quantity para chamar a função criarCamposDeRestricao quando o valor mudar
-        document.getElementById('restr_quantity').addEventListener('change', criarCamposDeRestricao);
+        document.getElementById('restr_quantity').addEventListener('change', valueChanged);
 
         // Chama a função criarCamposDeRestricao inicialmente para exibir os campos de acordo com o valor inicial do input restr_quantity
         criarCamposDeRestricao();
